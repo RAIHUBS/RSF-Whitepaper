@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>RSF 1.0: Recursive Semantic Framework</title>
+<style>
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    text-align: left;
+    margin: 60px 80px;
+    line-height: 1.6;
+    color: #000;
+    background: #fff;
+  }
+  h1 {
+    font-size: 22pt;
+    font-weight: bold;
+    text-align: left;
+    margin: 30pt 0 12pt 0;
+    page-break-before: avoid;
+  }
+  h2 {
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: left;
+    margin: 24pt 0 10pt 0;
+    page-break-before: avoid;
+  }
+  h3 {
+    font-size: 16pt;
+    font-weight: bold;
+    text-align: left;
+    margin: 20pt 0 8pt 0;
+    page-break-before: avoid;
+  }
+  h4 {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: left;
+    margin: 16pt 0 6pt 0;
+  }
+  p { text-align: left; margin: 6pt 0; }
+  .subtitle { font-size: 16pt; text-align: left; margin: 6pt 0; }
+  .meta { font-size: 12pt; text-align: left; margin: 4pt 0; }
+  .section-break { border: none; border-top: 1px solid #999; margin: 30pt 0; }
+  table {
+    border-collapse: collapse;
+    margin: 12pt 0;
+    font-size: 12pt;
+    width: 100%;
+  }
+  th, td {
+    border: 1px solid #555;
+    padding: 6pt 8pt;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #f0f0f0; font-weight: bold; }
+  pre {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11pt;
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: 10pt 14pt;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    text-align: left;
+    margin: 10pt 0;
+    line-height: 1.4;
+  }
+  code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11pt;
+  }
+  ul, ol { text-align: left; margin: 6pt 0; padding-left: 24pt; }
+  li { margin: 3pt 0; }
+  strong { font-weight: bold; }
+  em { font-style: italic; }
+  .cover-title { font-size: 22pt; font-weight: bold; text-align: left; margin: 0 0 4pt 0; }
+  .cover-subtitle { font-size: 16pt; text-align: left; margin: 4pt 0; }
+  .cover-desc { font-size: 16pt; text-align: left; margin: 6pt 0 18pt 0; }
+  blockquote {
+    border-left: 3px solid #ccc;
+    margin: 12pt 0;
+    padding: 6pt 14pt;
+    color: #333;
+    font-style: italic;
+  }
+  @media print {
+    body { margin: 0.8in; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+
+<p class="cover-title">RSF 1.0: Recursive Semantic Framework</p>
+<p class="cover-subtitle">A Six-Slot Semantic Framework for Agent Communication</p>
+<p class="cover-desc">Defining the Recursive Semantic Framework — A Minimal, Traceable, and Auditable Semantic Representation Protocol for Intelligent Systems</p>
+
+<p class="meta"><strong>Author</strong>: Wang Daqing</p>
+<p class="meta"><strong>Version</strong>: 1.0 &nbsp;&nbsp; <strong>Release Date</strong>: July 2026 &nbsp;&nbsp; <strong>License</strong>: CC BY 4.0</p>
+<p class="meta"><strong>Keywords</strong>: RSF, Recursive Semantic Framework, Semantic Representation, Six-Slot Structure, Agent Communication, Semantic Drift, Traceability, Auditability</p>
+
+<hr class="section-break">
+
+<!-- ===== ABSTRACT ===== -->
+
+<h1>Abstract</h1>
+
+<p>RSF (Recursive Semantic Framework) is a structured semantic intermediate representation protocol for intelligent systems. Its core is a fixed six-slot skeleton — <strong>A (Agent)</strong>, <strong>B (Action)</strong>, <strong>C (Target)</strong>, <strong>D (Time)</strong>, <strong>E (Environment)</strong>, <strong>F (Context)</strong> — designed to extract event semantics from natural language and enable direct semantic exchange between intelligent systems, rather than relying on natural language as an intermediary.</p>
+
+<p>RSF is not a new language, not a replacement for traditional grammar systems, and not a competitor to LLMs or Transformers. It is a <strong>semantic interface layer</strong> between natural language and intelligent systems.</p>
+
+<p>RSF's value is built around three core properties: <strong>Consistency</strong> (all Agents work from the same semantic structure, eliminating discrepancies from individual NL parsing), <strong>Traceability</strong> (every output fragment can be mapped back to a specific slot in the original input, making the semantic path reviewable), and <strong>Auditability</strong> (structured six-slot logs support item-by-item inspection of decision rationale, suitable for high-reliability domains such as finance, law, and healthcare).</p>
+
+<p>This document records the core ideas, structural definitions, design principles, and application examples of RSF, including multi-agent chain communication, high-fidelity domain translation, and structured RAG scenarios. RSF is currently at the conceptual framework and preliminary case validation stage, with no automated parser or large-scale system deployment. The purpose of this document is to establish a timestamped record of original ideas and provide a public reference for subsequent research.</p>
+
+<hr class="section-break">
+
+<!-- ===== 1. INTRODUCTION ===== -->
+
+<h1>1. Introduction: Communication Is About Meaning, Not Language</h1>
+
+<h2>1.1 The Convenience Store: Communication Without Language</h2>
+
+<p>A foreign tourist walks into a convenience store. The tourist does not speak the local language, and the cashier does not speak the tourist's language. They share no common language. The tourist wants to buy two bottles of cola — without saying a word, he walks to the cooler, takes out two bottles, and places them on the counter. The cashier observes this, then raises two fingers. The tourist understands this gesture as representing a quantity or price relationship, pays two dollars. The cashier accepts the payment. The transaction is complete.</p>
+
+<p>No language was exchanged, no text was written, no translation occurred — yet communication succeeded.</p>
+
+<p>Why? Because both parties shared a constraining semantic environment. The convenience store itself provided crucial semantic constraints: picking up a bottle of cola could mean stocking shelves in a warehouse, drinking at a friend's house, or — in a convenience store — an intention to purchase. The environment limited the interpretation space. Similarly, the cashier raising two fingers could mean the number 2, second place, a victory sign, or something else entirely — but in the transaction context, its meaning was constrained by the environment and shared knowledge.</p>
+
+<p>Thus, communication does not depend on one-to-one correspondence between symbols. It depends on: <strong>symbols + environmental constraints + shared knowledge + semantic understanding</strong>.</p>
+
+<h2>1.2 Language and Meaning Belong to Different Layers</h2>
+
+<p>The convenience store case reveals an important fact: the core of communication is not language itself, but the meaning structure behind language. Language is just one representation of semantics, not semantics itself.</p>
+
+<p>This distinction seems simple, but it points to a long-overlooked question: when intelligent systems exchange information, must they rely on natural language the way humans do? Or can they exchange meaning directly?</p>
+
+<p>Different languages can express the same underlying semantics:</p>
+
+<pre>English: The company completed the project.
+Chinese: 公司完成了项目。</pre>
+
+<p>The two sentences have different surface forms, but they describe the same event: a subject performed an action on an object. Languages are diverse, but semantic structures have a higher-order consistency.</p>
+
+<h2>1.3 Semantic Drift: The Hidden Cost in Multi-Agent Systems</h2>
+
+<p>Current multi-agent communication still relies heavily on natural language. The typical process is:</p>
+
+<pre>Agent A → generate natural language → Agent B → re-parse natural language → extract meaning → continue processing</pre>
+
+<p>This approach directly inherits human communication patterns. It is flexible, but it has a fundamental problem: every communication requires re-extracting meaning from linguistic form.</p>
+
+<p>More critically, there is a known but under-addressed risk — <strong>Semantic Drift</strong>. When Agent A converts its internal semantics into natural language, the first information loss occurs (encoding loss); when Agent B reconstructs semantics from natural language, the second loss occurs (decoding loss). In long-chain multi-agent collaboration, each NL generation → NL parsing cycle introduces an uncontrolled semantic shift.</p>
+
+<p>Consider a scenario: Agent A (customer service) tells Agent B (warehouse) "the customer returned a defective laptop." Agent B, after processing, tells Agent C (finance) "process a refund for this returned item." By the time it reaches Agent C, "defective" may have degraded to simply "returned," the refund conditions may be lost, and whether the refund includes shipping costs may not be mentioned at all. Information undergoes untraceable changes with each Agent hop.</p>
+
+<p>This is not a problem of natural language being "insufficiently expressive" — natural language is extremely powerful for expressing complex semantics. The problem is that natural language is <strong>optimized for human communication</strong>, not for precise, efficient, and verifiable information exchange between machines.</p>
+
+<h2>1.4 The Motivation for RSF</h2>
+
+<p>Based on the above observations, RSF (Recursive Semantic Framework) attempts to answer one question: <strong>how can intelligent systems represent and exchange meaning more directly</strong>, rather than relying on natural language as an intermediary every time?</p>
+
+<p>RSF does not seek to replace natural language — natural language will remain an important medium for human-machine interaction. What RSF focuses on is whether, within intelligent systems, information exchange can be based on semantic structures rather than linguistic forms.</p>
+
+<p>The following chapters define what RSF is, how it works, and its preliminary applications in multi-agent communication and high-fidelity domain translation.</p>
+
+<hr class="section-break">
+
+<!-- ===== 2. RSF: DEFINITION AND CORE STRUCTURE ===== -->
+
+<h1>2. RSF: Definition and Core Structure</h1>
+
+<h2>2.1 What Is RSF</h2>
+
+<p>RSF (Recursive Semantic Framework) is a structured semantic intermediate representation protocol for intelligent systems. Its core objective is to extract event semantics from natural language expressions and represent them using a fixed six-slot structure, enabling different intelligent systems to exchange information directly at the semantic level without needing to re-parse natural language each time.</p>
+
+<p><strong>RSF is not:</strong></p>
+
+<ul>
+  <li>A new natural or artificial language</li>
+  <li>A replacement for traditional grammar systems</li>
+  <li>A competitor to LLMs or Transformers</li>
+  <li>A communication protocol (such as MCP or A2A)</li>
+</ul>
+
+<p><strong>RSF is:</strong> a <em>semantic interface layer</em> between natural language and intelligent systems.</p>
+
+<h2>2.2 The Six-Slot Definition</h2>
+
+<p>RSF represents a basic semantic event as six slots:</p>
+
+<pre>Event = A(Agent) + B(Action) + C(Target) + D(Time) + E(Environment) + F(Context)</pre>
+
+<table>
+  <tr><th>Slot</th><th>Name</th><th>Description</th></tr>
+  <tr><td><strong>A</strong></td><td>Agent</td><td>The entity performing the action</td></tr>
+  <tr><td><strong>B</strong></td><td>Action</td><td>The verb and its complete inflections</td></tr>
+  <tr><td><strong>C</strong></td><td>Target</td><td>The object of the action</td></tr>
+  <tr><td><strong>D</strong></td><td>Time</td><td>Time point, duration, etc.</td></tr>
+  <tr><td><strong>E</strong></td><td>Environment</td><td>Space, location, etc.</td></tr>
+  <tr><td><strong>F</strong></td><td>Context</td><td>Manner, reason, etc. — unified into F</td></tr>
+</table>
+
+<p><strong>Example:</strong></p>
+
+<pre>The company completed the project yesterday in Tokyo.
+
+A         B           C         D          E         F
+Company   completed   project   yesterday  Tokyo     ∅</pre>
+
+<p>RSF is not concerned with "what words make up the sentence," but rather "what event structure this expression describes." The same event, whether expressed in English, Chinese, or Japanese, should yield the same six-slot skeleton after RSF extraction.</p>
+
+<h2>2.3 Recursion: Six Slots Within Six Slots, No New Slot Names</h2>
+
+<p>The word "Recursive" in RSF's name represents a core design idea: complexity comes from recursive expansion of the structure, not from an increase in the number of rules.</p>
+
+<p>Recursion is defined as: when any of the six slots contains a complete event inside it, the same A–F framework can be applied one level deeper, without introducing new slot names.</p>
+
+<p><strong>Example:</strong></p>
+
+<pre>The researchers who conducted the study analyzed the data.
+
+First level:
+A                                              B           C
+The researchers [who conducted the study]      analyzed    the data
+
+Recursive entry into slot A (relative clause):
+A                 B           C
+who (researchers) conducted   the study</pre>
+
+<p>The recursive level still uses A, B, C — not A1, B1, C1. Whether the nesting depth is one level or ten, the parsing rules remain identical. The Core does not require any additional rules for deep nesting.</p>
+
+<h2>2.4 Output Modes</h2>
+
+<table>
+  <tr><th>Mode</th><th>Content</th><th>Use Case</th></tr>
+  <tr><td><strong>Lite Mode</strong></td><td>Final result only (translation or response)</td><td>Daily use</td></tr>
+  <tr><td><strong>Standard Mode</strong></td><td>Result + symbol markup</td><td>Basic traceability needed</td></tr>
+  <tr><td><strong>Audit Mode</strong></td><td>Result + tree JSON + adjustment records</td><td>High-reliability scenarios</td></tr>
+</table>
+
+<h2>2.5 Relationship to Existing Communication Protocols</h2>
+
+<p>MCP (Model Context Protocol) and A2A (Agent-to-Agent) address how Agents connect, discover tools, and transmit data. RSF is not in competition with them:</p>
+
+<table>
+  <tr><th>Layer</th><th>Responsibility</th><th>Example</th></tr>
+  <tr><td><strong>Communication Protocol Layer</strong></td><td>How Agents connect and how data is transmitted</td><td>API / MCP / A2A</td></tr>
+  <tr><td><strong>Semantic Representation Layer (RSF)</strong></td><td>What meaning the Agents exchange</td><td>Six-slot structured semantics</td></tr>
+  <tr><td><strong>Application Layer</strong></td><td>Specific business logic</td><td>Financial transfer / Contract review</td></tr>
+</table>
+
+<p>MCP helps Agents discover tools, A2A helps Agents establish communication, and RSF helps Agents express tasks, states, conditions, goals, and decision rationales more clearly. The three can coexist.</p>
+
+<h2>2.6 Three Core Properties</h2>
+
+<p>RSF's value for intelligent systems is built around three core properties.</p>
+
+<p><strong>Consistency:</strong> All participating Agents work from the same semantic structure. When Agent-A extracts information into a six-slot semantic package, Agent-B and Agent-C read exactly the same slot structure — they do not need to each re-parse the semantics from natural language. This means the same event will not be interpreted differently due to linguistic differences between Agents. Consistency also extends to cross-language scenarios — the same event in English and Chinese yields an identical six-slot skeleton, eliminating the problem of "semantic distortion when switching languages."</p>
+
+<p><strong>Traceability:</strong> Every output fragment can be mapped back to a specific linguistic fragment in the original input and located to a corresponding A–F slot. Agents can trace "which sentence in the original input this information comes from, and which slot it belongs to." The six-slot structure itself is a natural indexing system: when the system needs to answer "where this amount came from," it can backtrack along the Agent chain to the specific slot and timestamp where the amount was originally extracted. Traceability turns the semantic path from a black box into a reviewable chain.</p>
+
+<p><strong>Auditability:</strong> Building on traceability, RSF's Audit mode provides complete structured logs — each Agent's input and output is a six-slot JSON, and every step's slot values, adjustment records, and decision rationale can be inspected item by item. For high-reliability domains such as finance, law, and healthcare, this means the system can answer "why this conclusion was reached" — not by inspecting the uninterpretable internal state of a model, but by inspecting a structured semantic path.</p>
+
+<p>These three properties support each other: consistency ensures all Agents work on the same semantic baseline, traceability ensures every decision path can be backtracked, and auditability ensures the entire reasoning chain can be externally verified. Together, they constitute RSF's core differentiation from both pure natural language communication and ordinary JSON Schema.</p>
+
+<hr class="section-break">
+
+<!-- ===== 3. DESIGN PRINCIPLES ===== -->
+
+<h1>3. Design Principles</h1>
+
+<h2>3.1 Fixed Skeleton</h2>
+
+<p>RSF's most fundamental design decision is: the top-level slots are fixed at six and cannot be increased.</p>
+
+<p>The starting point for this decision is not "six dimensions are sufficient to describe all semantics" — no finite structure can achieve that. The starting point is <strong>Closure</strong>: within the boundary of six slots, any event-type semantic expression can find a home. Information beyond the six-slot boundary is left to the AI's own intelligence.</p>
+
+<p>The value of a fixed skeleton is: the AI system does not need to re-judge "what is the structure of this sentence" each time it reasons — the answer is always those six slots.</p>
+
+<p>RSF assumes that the underlying AI system already possesses basic natural language understanding capabilities — it can identify slot boundaries and perform recursive parsing. This assumption is verifiable on current mainstream LLMs.</p>
+
+<h2>3.2 Packaging First</h2>
+
+<p>Traditional language analysis tends toward splitting — breaking verbs into tense, modality, voice, etc., and splitting fixed collocations into individual words. The finer the split, the more complex the relationships between semantic fragments become, and the higher the cost of recomposition.</p>
+
+<p>RSF does the opposite: <strong>package as a whole</strong>.</p>
+
+<p><strong>B-slot integration:</strong> The complete semantics of an action — the verb itself along with its tense, modality, fixed collocations, etc. — are placed into the B-slot as a whole. For example, "should have been completed" goes into B as one unit, rather than being split into four independent components.</p>
+
+<p><strong>F-slot unification:</strong> All modifying semantics — manner, instrument, reason, etc. — are unified into the F-slot. The Core does not subdivide them.</p>
+
+<p>The direct benefit of Packaging First is: the AI does not need to recompose the grammatical relationships between these components during reasoning. Tense, modality, etc., are already locked inside the B-slot; the AI only needs to understand them as a whole.</p>
+
+<h2>3.3 Traceability First</h2>
+
+<p>RSF's core priority is: <strong>fidelity and traceability take precedence over readability</strong>. Every output fragment must be mappable back to an A–F slot. Key information (facts, modality, negation, quantity, person, causal intensity) must be fully preserved. When readability conflicts with fidelity, RSF sacrifices some readability rather than allowing information loss or slot ambiguity.</p>
+
+<p>Only after fidelity and traceability are guaranteed should output naturalness be optimized.</p>
+
+<h2>3.4 Flatness and Recursion</h2>
+
+<p>RSF simultaneously upholds two seemingly contradictory design properties: structural flatness and recursive depth. In reality, they do not conflict.</p>
+
+<p><strong>Flatness</strong> means: the top level consists of only six slots, with no sub-slots and no mandatory Topic/Focus layer. This is a width constraint.</p>
+
+<p><strong>Recursion</strong> means: when any slot contains a complete event, the same A–F framework can be applied one level deeper, without introducing new slot names. This is a depth capability.</p>
+
+<p>Recursion does not violate flatness, because recursion does not add new slot types — no matter how many levels deep, the slots used are still A, B, C, D, E, F.</p>
+
+<h2>3.5 Round-Trip Conservation</h2>
+
+<p>RSF defines a rigorous verification standard — <strong>Round-Trip Conservation</strong>: converting text from the source language into a six-slot structure, generating the target language from the six-slot structure, and then translating the target language back into the source language — the result must match the original input on all key information. Modality, tense-aspect, negation, quantity, person, and causal intensity — deviation on any single dimension means fidelity has been compromised.</p>
+
+<h2>3.6 Core Closure</h2>
+
+<p>The Core pursues <strong>Closure</strong>, not Completeness.</p>
+
+<hr class="section-break">
+
+<!-- ===== 4. APPLICATION EXAMPLES ===== -->
+
+<h1>4. Application Examples</h1>
+
+<h2>4.1 Simple Event: Convenience Store Purchase</h2>
+
+<p>Starting with the convenience store story from Chapter 1. The event of a tourist buying two bottles of cola is represented in RSF as:</p>
+
+<table>
+  <tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+  <tr><td>Customer</td><td>purchase</td><td>two bottles of cola</td><td>∅</td><td>convenience store</td><td>payment=$2; condition=no common language</td></tr>
+</table>
+
+<p>The convenience store story in Chapter 1 already contained the complete six-slot semantics — they were simply not annotated at the time. What RSF does is make these implicit semantic roles explicit.</p>
+
+<h2>4.2 Translation Fidelity Example</h2>
+
+<pre>The report should have been completed by the team last week.</pre>
+
+<table>
+  <tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+  <tr><td>the team</td><td>should have been completed</td><td>the report</td><td>last week</td><td>∅</td><td>∅</td></tr>
+</table>
+
+<p>Traditional grammar would split "should have been completed" into a modal verb (should) + perfect aspect (have been) + passive voice (completed). RSF packages the entire phrase into the B-slot, because these three components jointly express an indivisible semantic unit: "something that ought to have been finished in the past, but it is uncertain whether it was actually finished."</p>
+
+<p>Round-trip conservation check: from the B-slot "should have been completed," generate the Chinese translation "应该已经被完成," then translate it back to English — tense, modality, and passive voice are all preserved without loss or attenuation.</p>
+
+<h2>4.3 Multi-Agent Chain Communication: Return Processing</h2>
+
+<p>This is the most important case study, demonstrating how RSF transmits semantics across multiple Agents while blocking semantic drift.</p>
+
+<h3>Scenario</h3>
+
+<p>Three Agents in an e-commerce system collaborate to process a customer return:</p>
+
+<table>
+  <tr><th>Agent</th><th>Role</th></tr>
+  <tr><td><strong>Agent-A</strong></td><td>Customer service Agent, receives the customer's request</td></tr>
+  <tr><td><strong>Agent-B</strong></td><td>Warehouse Agent, handles return receipt and quality inspection</td></tr>
+  <tr><td><strong>Agent-C</strong></td><td>Finance Agent, executes the refund</td></tr>
+</table>
+
+<h3>Step 1: Customer Input</h3>
+
+<pre>"我要退掉上周买的那台有缺陷的 BrandX Pro-15 笔记本电脑，订单号是 ORD-20260703-8821。"
+(I want to return the defective BrandX Pro-15 laptop I bought last week, order number is ORD-20260703-8821.)</pre>
+
+<h3>Step 2: Agent-A Extracts RSF Semantic Package</h3>
+
+<pre>{
+  "A": "Customer (CUST-48291, Zhang San)",
+  "B": "return + request_inspection + conditional_refund",
+  "C": {
+    "item": "BrandX Pro-15 Laptop",
+    "order_id": "ORD-20260703-8821"
+  },
+  "D": {
+    "purchase_date": "2026-07-03",
+    "return_initiated": "2026-07-10"
+  },
+  "E": "∅",
+  "F": {
+    "defect_description": "intermittent_black_screen",
+    "return_label": "issued_by_Agent-A_via_email",
+    "condition_for_refund": "confirm_defect_first",
+    "unresolved_question": ["does_refund_include_original_shipping"]
+  }
+}</pre>
+
+<p>Note the <code>unresolved_question</code> field in the F-slot: Agent-A proactively marks information it is uncertain about (whether the refund includes original shipping), rather than pretending the information is complete.</p>
+
+<h3>Step 3: Agent-A → Agent-B (Transmit Semantic Package)</h3>
+
+<p>Agent-A transmits the complete RSF semantic package to Agent-B without generating natural language.</p>
+
+<h3>Step 4: Agent-B Reads and Processes</h3>
+
+<p>Agent-B directly reads the six-slot structure:</p>
+
+<ul>
+  <li><strong>A</strong> = Customer CUST-48291 → can look up customer history</li>
+  <li><strong>B</strong> = return + inspection + conditional_refund → task chain is clear</li>
+  <li><strong>C</strong> = BrandX Pro-15, order ORD-20260703-8821 → precise SKU and order number</li>
+  <li><strong>F.defect_description</strong> = intermittent_black_screen → specific inspection criteria</li>
+  <li><strong>F.unresolved_question</strong> = does_refund_include_original_shipping → Agent-B knows this issue is unresolved</li>
+</ul>
+
+<p>After performing the quality inspection, Agent-B updates the semantic package and passes it to Agent-C:</p>
+
+<pre>{
+  "A": "Agent-B (Warehouse-R2D2)",
+  "B": "confirm_defect + forward_for_refund",
+  "C": {
+    "order_id": "ORD-20260703-8821",
+    "customer": "CUST-48291",
+    "item": "BrandX Pro-15"
+  },
+  "D": "2026-07-11",
+  "E": "warehouse-R2D2",
+  "F": {
+    "inspection_result": "confirmed_intermittent_black_screen",
+    "refund_authorization": {
+      "approved": true,
+      "amount": 8999.00,
+      "currency": "CNY",
+      "includes_shipping": true,
+      "policy_reference": "refund_policy_v4.2_section_3.1"
+    },
+    "resolved_questions": {
+      "does_refund_include_original_shipping": "yes_per_policy_v4.2"
+    },
+    "action_required_by": "Agent-C (Finance)"
+  }
+}</pre>
+
+<h3>Step 5: Agent-C Executes Directly</h3>
+
+<p>Agent-C does not need to ask any follow-up questions. It executes the refund directly.</p>
+
+<h3>Comparison: NL Communication vs RSF Semantic Package</h3>
+
+<table>
+  <tr><th>Dimension</th><th>NL Communication</th><th>RSF Semantic Package</th></tr>
+  <tr><td><strong>Information precision</strong></td><td>"a defective laptop" — vague</td><td>brand/model/order_id/defect all in slots, zero ambiguity</td></tr>
+  <tr><td><strong>Clarification rounds</strong></td><td>At least 1–2 rounds of follow-up questions</td><td>Zero additional rounds</td></tr>
+  <tr><td><strong>Unresolved issues</strong></td><td>Agent-A may forget to mention "does refund include shipping"</td><td>F.unresolved_question proactively marks it; the issue is never lost</td></tr>
+  <tr><td><strong>Semantic drift</strong></td><td>Information degrades through two NL encoding/decoding cycles</td><td>Direct transmission, zero drift</td></tr>
+  <tr><td><strong>Audit</strong></td><td>Relies on NLP to understand text logs</td><td>Slot-by-slot inspection of structured JSON</td></tr>
+</table>
+
+<h3>Audit Trail</h3>
+
+<pre>Input (Customer NL)
+  ↓
+Agent-A: RSF Extraction
+  └─ A: Customer CUST-48291
+  └─ B: return + inspection + conditional_refund
+  └─ C: BrandX Pro-15 / ORD-20260703-8821
+  └─ F: unresolved_question [shipping_fee]
+  ↓
+Agent-B: Inspection + Update
+  └─ B: confirm_defect → forward_for_refund
+  └─ F: resolved_questions [shipping_fee: yes]
+  └─ F: refund_authorization [amount: 8999.00]
+  ↓
+Agent-C: Execute Refund
+  └─ Action: refund_approved
+  └─ Amount: 8999.00 CNY
+  └─ Policy: refund_policy_v4.2_section_3.1</pre>
+
+<h2>4.4 High-Fidelity Domain Translation Examples</h2>
+
+<p>RSF's six-slot structure and Packaging First principle are naturally suited to domains that demand high information fidelity — such as law, finance, and healthcare. The following two examples demonstrate how RSF preserves critical semantics in these domains.</p>
+
+<h3>Legal Clause</h3>
+
+<pre>"The Lessee shall, within 30 days after receipt of the notice, remedy the breach,
+failing which the Lessor may terminate this Agreement."</pre>
+
+<table>
+  <tr><th>A</th><th>B</th><th>C</th><th>D</th><th>F</th></tr>
+  <tr><td>Lessee</td><td>shall remedy</td><td>the breach</td><td>within 30 days after receipt of notice</td><td>condition=failing which → Lessor may terminate</td></tr>
+</table>
+
+<p><strong>Fidelity point:</strong> The B-slot's "shall remedy" preserves the obligatory force of "shall" in legal English — it is neither "may" (permissive) nor "must" (more imperative), but the standard modal for legal obligations. The F-slot captures the "failing which" conditional relationship, which is the critical logical connector in this clause — if the Lessee fails to remedy within 30 days, the Lessor's termination right is triggered. Traditional translation might simplify "failing which" to "otherwise," losing the precise "condition → consequence" logical relationship of legal text.</p>
+
+<p><strong>Chinese translation under RSF:</strong> "承租人应在收到通知后30天内补救该违约行为，否则出租人可终止本协议。"</p>
+
+<h3>Medical Record</h3>
+
+<pre>"No evidence of metastasis was found in any of the 12 lymph nodes examined."</pre>
+
+<table>
+  <tr><th>A</th><th>B</th><th>C</th><th>F</th></tr>
+  <tr><td>∅</td><td>was found</td><td>no evidence of metastasis</td><td>scope=all 12 lymph nodes examined; negation=full</td></tr>
+</table>
+
+<p><strong>Fidelity point:</strong> This is a typical medical report sentence where negation scope and quantification are critical. The C-slot "no evidence of metastasis" and the F-slot's "scope=all 12 lymph nodes examined" together preserve the negation scope — it is not "metastasis was not found in some of the lymph nodes," but "all 12 lymph nodes were examined and none showed evidence of metastasis." If the negation scope were misinterpreted (e.g., understood as "12 lymph nodes, some of which showed no evidence"), it would directly affect clinical diagnosis. The empty A-slot also faithfully reflects the medical writing convention of not specifying the agent.</p>
+
+<p><strong>Chinese translation under RSF:</strong> "所检查的12枚淋巴结中均未发现转移证据。"</p>
+
+<h2>4.5 Structured RAG Example</h2>
+
+<p>In RAG scenarios, a user query can first be extracted into a six-slot structure, then used for retrieval. For example, the query "去年第三季度的营收数据" (revenue data for Q3 last year):</p>
+
+<table>
+  <tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th></tr>
+  <tr><td>∅</td><td>query</td><td>revenue data</td><td>Q3 2025</td><td>∅</td><td>data_source=financial_reports</td></tr>
+</table>
+
+<p>The retrieval system can use a combination of the D-slot (Q3 2025) and C-slot (revenue data) for precise retrieval, rather than performing vector matching on the entire NL query. This can improve retrieval accuracy in structured query scenarios.</p>
+
+<hr class="section-break">
+
+<!-- ===== 5. BOUNDARIES AND POSITIONING ===== -->
+
+<h1>5. Boundaries and Positioning</h1>
+
+<h2>5.1 Distinctions from Related Work</h2>
+
+<p><strong>AMR (Abstract Meaning Representation):</strong> AMR represents sentences as directed graphs, with nodes as semantic concepts and edges as relations. AMR pursues linguistic completeness, but at the cost of high graph complexity and parsing cost. RSF pursues a minimal executable event skeleton, not a complete semantic graph.</p>
+
+<p><strong>SRL (Semantic Role Labeling):</strong> SRL identifies predicate-argument structures in sentences, with role sets varying by predicate type. RSF uses fixed six slots. Fixed means lower parsing complexity, but also coarser granularity — this is a trade-off made for engineering executability.</p>
+
+<p><strong>FrameNet:</strong> FrameNet is based on frame semantics, where each word activates a frame. FrameNet is extremely rich, but its coverage is limited to annotated frames. RSF does not adopt a frame-based system.</p>
+
+<p><strong>CNL (Controlled Natural Language):</strong> CNL eliminates ambiguity by restricting grammar and vocabulary. RSF is not CNL — it does not restrict how users input language. It accepts full natural language input and extracts semantic structure at the understanding layer.</p>
+
+<p><strong>MCP / A2A:</strong> Communication protocols handle "how to transmit"; RSF handles "what to transmit." They can coexist.</p>
+
+<h2>5.2 RSF's Positioning</h2>
+
+<p>RSF prioritizes <strong>"minimal executable event skeleton + engineering auditability"</strong> over linguistic completeness.</p>
+
+<hr class="section-break">
+
+<!-- ===== 6. CURRENT STATUS, LIMITATIONS, AND FUTURE DIRECTIONS ===== -->
+
+<h1>6. Current Status, Limitations, and Future Directions</h1>
+
+<h2>6.1 Current Status</h2>
+
+<p>RSF is currently at the conceptual framework and preliminary case validation stage. The core specification (constitution) has been frozen, but there is no automated RSF parser or large-scale system deployment. All examples in this document are manually annotated or extracted with the assistance of LLMs.</p>
+
+<h2>6.2 Known Limitations</h2>
+
+<p><strong>No automated parser yet:</strong> Current six-slot extraction is done manually or with LLM assistance. There is no dedicated RSF parsing engine. Automating the conversion from natural language to six-slot structure is the key bottleneck for RSF implementation.</p>
+
+<p><strong>Coverage not systematically validated:</strong> Can six slots cover all expression types in all languages? Preliminary manual validation exists, but there has been no large-scale testing. Coverage of edge cases (poetry, metaphor, irony) is unknown.</p>
+
+<p><strong>Agent communication not deployed in real systems:</strong> The Agent example in Chapter 4 is a conceptual demonstration. It has not been implemented and tested in a real multi-agent system. Quantitative metrics such as token savings and reduction in communication rounds have yet to be measured.</p>
+
+<p><strong>Integration cost unknown:</strong> How much re-engineering is required to migrate an existing Agent system from NL communication to RSF semantic package communication? There is no practical experience yet.</p>
+
+<h2>6.3 Future Directions</h2>
+
+<p><strong>Benchmark design:</strong> A reproducible test framework is needed to evaluate RSF's practical benefits. Controlled experiments should compare NL communication and RSF semantic package communication on the same tasks, measuring token consumption, communication rounds, consistency, semantic drift magnitude, and audit pass rate.</p>
+
+<p><strong>Open-source parser:</strong> Develop an automated parser from natural language to six-slot structures — whether rule-based, fine-tuned LLM, or a hybrid approach.</p>
+
+<p><strong>Cross-language validation:</strong> Can significantly different languages — Chinese, English, Japanese, Arabic — all be adequately covered by six slots? Where are the boundaries?</p>
+
+<p><strong>Encoder-side preprocessing:</strong> Adding an RSF preprocessing step at the front end of Transformer models (such as LLMs or T5) to distill long texts into six-slot skeletons before input — this direction is currently at the concept stage and requires concrete engineering experiments to verify feasibility.</p>
+
+<hr class="section-break">
+
+<!-- ===== DECLARATION ===== -->
+
+<h1>Declaration</h1>
+
+<p><strong>Specification:</strong> RSF (Constitution Edition)</p>
+<p><strong>Status:</strong> Core Frozen</p>
+<p><strong>License:</strong> CC BY 4.0</p>
+
+<p>This document is a record of original ideas. Non-commercial academic discussion and verification are welcome.</p>
+
+<hr class="section-break">
+
+<p style="font-size: 12pt;"><strong>Author</strong>: Wang Daqing &nbsp;&nbsp; <strong>Version</strong>: 1.0 &nbsp;&nbsp; <strong>Release Date</strong>: July 2026 &nbsp;&nbsp; <strong>License</strong>: CC BY 4.0</p>
+
+</body>
+</html>
